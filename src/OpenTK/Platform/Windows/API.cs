@@ -3174,7 +3174,7 @@ namespace OpenTK.Platform.Windows
     /// Mouse indicator flags (found in winuser.h).
     /// </summary>
     [Flags]
-    internal enum RawMouseFlags : ushort
+    public enum RawMouseFlags : ushort
     {
         /// <summary>
         /// LastX/Y indicate relative motion.

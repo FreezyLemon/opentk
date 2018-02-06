@@ -239,17 +239,17 @@ namespace OpenTK.Platform.Windows
                     mouse.SetScrollRelative((short)raw.ButtonData / 120.0f, 0);
                 }
 
+                mouse.RawFlags = raw.Flags;
+
                 if ((raw.Flags & RawMouseFlags.MOUSE_MOVE_ABSOLUTE) != 0)
                 {
                     mouse.X = raw.LastX;
                     mouse.Y = raw.LastY;
-                    mouse.IsAbsolute = true;
                 }
                 else
                 {   // Seems like MOUSE_MOVE_RELATIVE is the default, unless otherwise noted.
                     mouse.X += raw.LastX;
                     mouse.Y += raw.LastY;
-                    mouse.IsAbsolute = false;
                 }
 
                 lock (UpdateLock)
