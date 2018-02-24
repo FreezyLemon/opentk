@@ -25,6 +25,10 @@
 // THE SOFTWARE.
 //
 
+using Rectangle = System.Drawing.Rectangle;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics;

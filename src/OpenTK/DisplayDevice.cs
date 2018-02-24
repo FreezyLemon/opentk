@@ -23,6 +23,8 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using Rectangle = System.Drawing.Rectangle;
+
 using System;
 using System.Collections.Generic;
 #if !MINIMAL

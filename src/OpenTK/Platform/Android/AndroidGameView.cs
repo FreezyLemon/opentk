@@ -5,6 +5,8 @@
  * See license.txt for licensing detailed licensing details.
  */
 
+using Size = System.Drawing.Size;
+
 using System;
 using System.ComponentModel;
 using System.Drawing;

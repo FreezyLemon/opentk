@@ -25,6 +25,8 @@
 // THE SOFTWARE.
 //
 
+using Point = System.Drawing.Point;
+
 using System;
 #if !MINIMAL
 using System.Drawing;

@@ -4,6 +4,8 @@
  * See license.txt for licensing detailed licensing details.
  */
 
+using Rectangle = System.Drawing.Rectangle;
+
 using System;
 #if !MINIMAL
 using System.Drawing;

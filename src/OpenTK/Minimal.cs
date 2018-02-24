@@ -1,4 +1,6 @@
-﻿#if ANDROID || IPHONE || MINIMAL
+﻿using Rectangle = System.Drawing.Rectangle;
+
+#if ANDROID || IPHONE || MINIMAL
 using System;
 
 #if !MINIMAL
