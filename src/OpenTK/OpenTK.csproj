@@ -389,18 +389,6 @@
     <Compile Include="Graphics\ColorFormat.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Graphics\OpenGL\GLEnums.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\OpenGL\GL.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\OpenGL\GLHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\OpenGL\ErrorHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Graphics\ES10\ES.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -414,18 +402,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Graphics\ES10\Core.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\ES11\ErrorHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\ES11\Helper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\ES20\ErrorHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\ES20\Helper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Input\Keyboard.cs">
@@ -678,24 +654,10 @@
     <Compile Include="Graphics\ES30\Helper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Graphics\OpenGL4\Helper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\OpenGL4\ErrorHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Graphics\OpenGL4\GL4.cs" />
-    <Compile Include="Graphics\OpenGL4\GL4Enums.cs" />
     <Compile Include="Graphics\ES30\ES30.cs" />
     <Compile Include="Graphics\ES30\ES30Enums.cs" />
-    <Compile Include="Graphics\ES20\ES20.cs" />
-    <Compile Include="Graphics\ES20\ES20Enums.cs" />
-    <Compile Include="Graphics\ES11\ES11.cs" />
-    <Compile Include="Graphics\ES11\ES11Enums.cs" />
-    <Compile Include="Graphics\ES11\ES11Obsolete.cs" />
     <Compile Include="SlotAttribute.cs" />
     <Compile Include="RewrittenAttribute.cs" />
-    <Compile Include="Graphics\OpenGL\GLObsolete.cs" />
     <Compile Include="Platform\MacOS\NS.cs" />
     <Compile Include="Input\GamePadCapabilities.cs" />
     <Compile Include="Input\GamePadDPad.cs" />
