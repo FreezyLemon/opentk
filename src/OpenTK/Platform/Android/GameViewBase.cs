@@ -1143,6 +1143,12 @@ namespace OpenTK
             set { throw new NotSupportedException(); }
         }
 
+        public bool CursorGrabbed
+        {
+            get => true;
+            set { }
+        }
+
         event EventHandler<EventArgs> INativeWindow.IconChanged
         {
             add { throw new NotSupportedException(); }
