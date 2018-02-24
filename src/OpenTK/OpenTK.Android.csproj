@@ -78,6 +78,7 @@
     <Compile Include="Platform\Android\AndroidGraphicsMode.cs" />
     <Compile Include="Platform\Android\GLCalls.cs" />
     <Compile Include="Platform\Egl\EglException.cs" />
+    <Compile Include="Platform\Windows\WinRawMouseFlags.cs" /> 
     <Compile Include="RewrittenAttribute.cs" />
     <Compile Include="SlotAttribute.cs" />
     <Compile Include="Toolkit.cs" />
