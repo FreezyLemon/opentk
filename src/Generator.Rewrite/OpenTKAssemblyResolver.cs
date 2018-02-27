@@ -61,7 +61,11 @@ namespace OpenTK.Rewrite
                 "/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/Facades",
                 "/Library/Frameworks/Xamarin.Android.framework/Versions/Current/lib/mono/2.1"
             }
-                : new[] { framework_dir };
+                : new[]
+            {
+                framework_dir,
+                @"D:\Program Files (x86)\Microsoft Visual Studio\Preview\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v7.1",
+            };
 
             if (IsZero(name.Version))
             {
