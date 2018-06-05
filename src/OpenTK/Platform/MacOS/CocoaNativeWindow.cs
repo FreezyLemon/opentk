@@ -1376,25 +1376,29 @@ namespace OpenTK.Platform.MacOS
             }
         }
 
-        private NSApplicationPresentationOptions lastAutoHideOptions;
+        private NSApplicationPresentationOptions lastAutoHideFlags;
 
         private void SetMenuVisible(bool visible)
         {
             var options = (NSApplicationPresentationOptions)Cocoa.SendInt(NSApplication.Handle, selPresentationOptions);
-            var changedOptions = NSApplicationPresentationOptions.HideMenuBar | NSApplicationPresentationOptions.HideDock;
+            var hideMenuAndDock = NSApplicationPresentationOptions.HideMenuBar | NSApplicationPresentationOptions.HideDock;
+            var autoHideMenuAndDock = NSApplicationPresentationOptions.AutoHideMenuBar | NSApplicationPresentationOptions.AutoHideDock;
 
             if (!visible)
             {
-                lastAutoHideOptions = options & (NSApplicationPresentationOptions.AutoHideMenuBar | NSApplicationPresentationOptions.AutoHideDock);
+                lastAutoHideFlags = options & autoHideMenuAndDock;
 
-                options |= changedOptions;
                 // both hide and autohide cannot be set at the same time, so we'll remove it here
-                options &= (NSApplicationPresentationOptions.AutoHideMenuBar | NSApplicationPresentationOptions.AutoHideDock);
+                options &= ~autoHideMenuAndDock;
+                options |= hideMenuAndDock;
             }
             else
             {
-                options &= ~changedOptions;
-                options |= lastAutoHideOptions;
+                options &= ~hideMenuAndDock;
+                options |= lastAutoHideFlags;
+
+                // we only want to use these once, when setting menu back to visible
+                lastAutoHideFlags = 0;
             }
 
             Cocoa.SendVoid(NSApplication.Handle, selSetPresentationOptions, (int)options);
