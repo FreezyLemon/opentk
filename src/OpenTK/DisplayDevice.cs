@@ -40,7 +40,7 @@ namespace OpenTK
 
         private bool primary;
         private Rectangle bounds;
-        private DisplayResolution current_resolution = new DisplayResolution();
+
         private List<DisplayResolution> available_resolutions = new List<DisplayResolution>();
         private IList<DisplayResolution> available_resolutions_readonly;
 
@@ -67,7 +67,7 @@ namespace OpenTK
             : this()
         {
             // Todo: Consolidate current resolution with bounds? Can they fall out of sync right now?
-            this.current_resolution = currentResolution;
+            this.CurrentResolution = currentResolution;
             IsPrimary = primary;
             this.available_resolutions.AddRange(availableResolutions);
             #pragma warning disable 612,618
@@ -85,22 +85,22 @@ namespace OpenTK
             internal set
             {
                 bounds = value;
-                current_resolution.Height = bounds.Height;
-                current_resolution.Width = bounds.Width;
+                CurrentResolution.Height = bounds.Height;
+                CurrentResolution.Width = bounds.Width;
             }
         }
 
         /// <summary>Gets a System.Int32 that contains the width of this display in pixels.</summary>
-        public int Width { get { return current_resolution.Width; } }
+        public int Width { get { return CurrentResolution.Width; } }
 
         /// <summary>Gets a System.Int32 that contains the height of this display in pixels.</summary>
-        public int Height { get { return current_resolution.Height; } }
+        public int Height { get { return CurrentResolution.Height; } }
 
         /// <summary>Gets a System.Int32 that contains number of bits per pixel of this display. Typical values include 8, 16, 24 and 32.</summary>
         public int BitsPerPixel
         {
-            get { return current_resolution.BitsPerPixel; }
-            internal set { current_resolution.BitsPerPixel = value; }
+            get { return CurrentResolution.BitsPerPixel; }
+            internal set { CurrentResolution.BitsPerPixel = value; }
         }
 
         /// <summary>
@@ -108,8 +108,8 @@ namespace OpenTK
         /// </summary>
         public float RefreshRate
         {
-            get { return current_resolution.RefreshRate; }
-            internal set { current_resolution.RefreshRate = value; }
+            get { return CurrentResolution.RefreshRate; }
+            internal set { CurrentResolution.RefreshRate = value; }
         }
 
         /// <summary>Gets a System.Boolean that indicates whether this Display is the primary Display in systems with multiple Displays.</summary>
@@ -163,10 +163,15 @@ namespace OpenTK
             }
             if (resolution == null)
             {
-                return current_resolution;
+                return CurrentResolution;
             }
             return resolution;
         }
+
+        /// <summary>
+        /// Gets the <see cref="DisplayResolution"/> instance that is currently being used by this display.
+        /// </summary>
+        public DisplayResolution CurrentResolution { get; private set; } = new DisplayResolution();
 
         /// <summary>
         /// Gets the list of <see cref="DisplayResolution"/> objects available on this device.
@@ -192,7 +197,7 @@ namespace OpenTK
                 this.RestoreResolution();
             }
 
-            if (resolution == current_resolution)
+            if (resolution == CurrentResolution)
             {
                 return;
             }
@@ -203,9 +208,9 @@ namespace OpenTK
             {
                 if (OriginalResolution == null)
                 {
-                    OriginalResolution = current_resolution;
+                    OriginalResolution = CurrentResolution;
                 }
-                current_resolution = resolution;
+                CurrentResolution = resolution;
             }
             else
             {
@@ -237,7 +242,7 @@ namespace OpenTK
 
                 if (implementation.TryRestoreResolution(this))
                 {
-                    current_resolution = OriginalResolution;
+                    CurrentResolution = OriginalResolution;
                     OriginalResolution = null;
                 }
                 else
