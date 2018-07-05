@@ -93,7 +93,6 @@ namespace Bind
                             case "legacy":
                             case "o":
                             case "option":
-                            {
                                 val = val.ToLower();
                                 bool enable = !opt.StartsWith("-");
                                 if (val.StartsWith("+") || val.StartsWith("-"))
@@ -123,7 +122,6 @@ namespace Bind
                                 }
 
                                 break;
-                            }
                             default:
                                 throw new ArgumentException(
                                     String.Format("Argument {0} not recognized. Use the '/?' switch for help.", a)
