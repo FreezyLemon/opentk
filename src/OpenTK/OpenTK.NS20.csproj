@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>OpenTK</AssemblyName>
     <PackageVersion>1.0.4</PackageVersion>
@@ -707,4 +708,5 @@
     <Exec Command="mono $(MSBuildThisFileDirectory)../Generator.Rewrite/bin/Debug/Rewrite.exe -a $(OutputPath)OpenTK.dll --debug --netstandard" Condition="$(OS) != 'Windows_NT' and $(Configuration) == 'Debug'" />
     <Exec Command="mono $(MSBuildThisFileDirectory)../Generator.Rewrite/bin/Release/Rewrite.exe -a $(OutputPath)OpenTK.dll --netstandard" Condition="$(OS) != 'Windows_NT' and $(Configuration) == 'Release'" />
   </Target>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
