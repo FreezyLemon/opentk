@@ -28,9 +28,15 @@ namespace OpenTK.NT.Tests.User32Tests.WindowTests
             };
         }
 
+        protected virtual string GetWindowTitle() => "Test Window";
+
         protected virtual WindowStyles GetWindowStyle() => 0;
 
         protected virtual ExtendedWindowStyles GetExtendedWindowStyle() => 0;
+
+        protected virtual Point GetWindowPosition() => new Point(300, 200);
+
+        protected virtual System.Drawing.Size GetWindowSize() => new System.Drawing.Size(1280, 720);
 
         protected virtual IntPtr WindowProcedure(IntPtr window, WindowMessage message, IntPtr wParam, IntPtr lParam)
         {
@@ -60,12 +66,15 @@ namespace OpenTK.NT.Tests.User32Tests.WindowTests
         {
             var windowClass = GetWindowClass();
 
-            if (User32.WindowClass.RegisterClassEx(ref windowClass) == 0)
+            var classAtom = User32.WindowClass.RegisterClassEx(ref windowClass);
+            if (classAtom == 0)
             {
                 throw new Win32Exception("Registering the window class failed!");
             }
 
-            var window = User32.Window.CreateWindowEx(GetExtendedWindowStyle(), _className, "Test Window", GetWindowStyle(), 200, 200, 1280, 720, moduleInstance: _hInstance);
+            var position = GetWindowPosition();
+            var size = GetWindowSize();
+            var window = User32.Window.CreateWindowEx(GetExtendedWindowStyle(), classAtom, GetWindowTitle(), GetWindowStyle(), position.X, position.Y, size.Width, size.Height, moduleInstance: _hInstance);
 
             if (window == IntPtr.Zero)
             {
