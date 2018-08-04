@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{9A58BE7A
 		props\netfx-mono.props = props\netfx-mono.props
 		props\nuget-common.props = props\nuget-common.props
 		props\stylecop.props = props\stylecop.props
+		props\tests.props = props\tests.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci-config", "ci-config", "{DB4C8652-965F-44F9-998B-8918768DB6AA}"
@@ -38,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci-config", "ci-config", "{
 		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK.NT.Tests", "src\OpenTK.NT.Tests\OpenTK.NT.Tests.csproj", "{14F9BA28-F6B3-4DEE-A831-FADD3C9A3630}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +72,10 @@ Global
 		{30B46B07-2836-4862-B7FA-A158B581F83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30B46B07-2836-4862-B7FA-A158B581F83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30B46B07-2836-4862-B7FA-A158B581F83E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F9BA28-F6B3-4DEE-A831-FADD3C9A3630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F9BA28-F6B3-4DEE-A831-FADD3C9A3630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F9BA28-F6B3-4DEE-A831-FADD3C9A3630}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F9BA28-F6B3-4DEE-A831-FADD3C9A3630}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
