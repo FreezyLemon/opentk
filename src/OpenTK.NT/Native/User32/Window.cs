@@ -747,8 +747,8 @@ namespace OpenTK.NT.Native
             /// </param>
             /// <param name="x">The new position of the left side of the window, in client coordinates.</param>
             /// <param name="y">The new position of the top of the window, in client coordinates.</param>
-            /// <param name="cx">The new width of the window, in pixels.</param>
-            /// <param name="cy">The new height of the window, in pixels.</param>
+            /// <param name="width">The new width of the window, in pixels.</param>
+            /// <param name="height">The new height of the window, in pixels.</param>
             /// <param name="flags">The window sizing and positioning flags.</param>
             /// <returns>
             /// If the function succeeds, the return value is true.<para/>
@@ -763,8 +763,8 @@ namespace OpenTK.NT.Native
                 [In] [Optional] HWND windowInsertAfter,
                 [In] int x,
                 [In] int y,
-                [In] int cx,
-                [In] int cy,
+                [In] int width,
+                [In] int height,
                 [In] SetWindowPosFlags flags
             );
 
@@ -780,8 +780,8 @@ namespace OpenTK.NT.Native
             /// </param>
             /// <param name="x">The new position of the left side of the window, in client coordinates.</param>
             /// <param name="y">The new position of the top of the window, in client coordinates.</param>
-            /// <param name="cx">The new width of the window, in pixels.</param>
-            /// <param name="cy">The new height of the window, in pixels.</param>
+            /// <param name="width">The new width of the window, in pixels.</param>
+            /// <param name="height">The new height of the window, in pixels.</param>
             /// <param name="flags">The window sizing and positioning flags.</param>
             /// <returns>
             /// If the function succeeds, the return value is true.<para/>
@@ -796,8 +796,8 @@ namespace OpenTK.NT.Native
                 [In] [Optional] SetWindowPosHwndEnum windowInsertAfter,
                 [In] int x,
                 [In] int y,
-                [In] int cx,
-                [In] int cy,
+                [In] int width,
+                [In] int height,
                 [In] SetWindowPosFlags flags
             );
 

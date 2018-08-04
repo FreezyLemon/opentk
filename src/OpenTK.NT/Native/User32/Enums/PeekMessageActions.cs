@@ -12,12 +12,14 @@ namespace OpenTK.NT.Native
     public enum PeekMessageActions : UINT
     {
         /// <summary>
-        /// Messages are not removed from the queue after processing by <see cref="User32.Message.PeekMessage"/>.
+        /// Messages are not removed from the queue after processing by
+        /// <see cref="User32.Message.PeekMessage(out Msg, IntPtr, UINT, UINT, PeekMessageActions)"/>.
         /// </summary>
         NoRemove = 0,
 
         /// <summary>
-        /// Messages are removed from the queue after processing by <see cref="User32.Message.PeekMessage"/>.
+        /// Messages are removed from the queue after processing by
+        /// <see cref="User32.Message.PeekMessage(out Msg, IntPtr, UINT, UINT, PeekMessageActions)"/>.
         /// </summary>
         Remove = 1,
 

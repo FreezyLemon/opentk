@@ -81,6 +81,41 @@ namespace OpenTK.NT.Native
             );
 
             /// <summary>
+            /// Dispatches incoming sent messages, checks the thread message queue for a posted message,
+            /// and retrieves the message (if any exist).
+            /// </summary>
+            /// <param name="msg">A <see cref="Msg"/> structure that receives message information.</param>
+            /// <param name="window">
+            /// A handle to the window whose messages are to be retrieved.
+            /// The window must belong to the current thread.<para/>
+            /// If <paramref name="window"/> is <see cref="IntPtr.Zero"/>,
+            /// <see cref="PeekMessage(out Msg, HWND, uint, uint, PeekMessageActions)"/> retrieves messages for any
+            /// window that belongs to the current thread, and any messages on the current thread's message queue whose
+            /// <paramref name="window"/> value is <see cref="IntPtr.Zero"/> (see the <see cref="Msg"/> structure).
+            /// Therefore if <paramref name="window"/> is <see cref="IntPtr.Zero"/>, both window messages
+            /// and thread messages are processed.<para/>
+            /// If <paramref name="window"/> is -1,
+            /// <see cref="PeekMessage(out Msg, HWND, uint, uint, PeekMessageActions)"/> retrieves only messages on the
+            /// current thread's message queue whose <paramref name="window"/> value is <see cref="IntPtr.Zero"/>,
+            /// that is, thread messages as posted by <see cref="PostMessage(HWND, WindowMessage, HWND, HWND)"/>
+            /// (when the window parameter is <see cref="IntPtr.Zero"/>) or PostThreadMessage.
+            /// </param>
+            /// <param name="messageActions">Specifies how messages are to be handled.</param>
+            /// <returns>
+            /// If a message is available, the return value is true.<para/>
+            /// If no messages are available, the return value is false.
+            /// </returns>
+            public static BOOL PeekMessage
+            (
+                [Out] out Msg msg,
+                [In] [Optional] HWND window,
+                [In] PeekMessageActions messageActions
+            )
+            {
+                return PeekMessage(out msg, window, 0, 0, messageActions);
+            }
+
+            /// <summary>
             /// Retrieves a message from the calling thread's message queue. The function dispatches
             /// incoming sent messages until a posted message is available for retrieval.<para/>
             /// Unlike <see cref="GetMessage(out Msg, HWND, uint, uint)"/>, the
@@ -143,6 +178,43 @@ namespace OpenTK.NT.Native
                 [In] uint messageFilterMin,
                 [In] uint messageFilterMax
             );
+
+            /// <summary>
+            /// Retrieves a message from the calling thread's message queue. The function dispatches
+            /// incoming sent messages until a posted message is available for retrieval.<para/>
+            /// Unlike <see cref="GetMessage(out Msg, HWND, uint, uint)"/>, the
+            /// <see cref="PeekMessage(out Msg, HWND, uint, uint, PeekMessageActions)"/> function does not wait
+            /// for a message to be posted before returning.
+            /// </summary>
+            /// <param name="msg">
+            /// An <see cref="Msg"/> structure that receives message information from the thread's message queue.
+            /// </param>
+            /// <param name="window">
+            /// A handle to the window whose messages are to be retrieved.
+            /// The window must belong to the current thread.<para/>
+            /// If <paramref name="window"/> is <see cref="IntPtr.Zero"/>,
+            /// <see cref="PeekMessage(out Msg, HWND, uint, uint, PeekMessageActions)"/> retrieves messages for any
+            /// window that belongs to the current thread, and any messages on the current thread's message queue whose
+            /// <paramref name="window"/> value is <see cref="IntPtr.Zero"/> (see the <see cref="Msg"/> structure).
+            /// Therefore if <paramref name="window"/> is <see cref="IntPtr.Zero"/>, both window messages
+            /// and thread messages are processed.<para/>
+            /// If <paramref name="window"/> is -1,
+            /// <see cref="PeekMessage(out Msg, HWND, uint, uint, PeekMessageActions)"/> retrieves only messages on the
+            /// current thread's message queue whose <paramref name="window"/> value is <see cref="IntPtr.Zero"/>,
+            /// that is, thread messages as posted by <see cref="PostMessage(HWND, WindowMessage, HWND, HWND)"/>
+            /// (when the window parameter is <see cref="IntPtr.Zero"/>) or PostThreadMessage.
+            /// </param>
+            /// <returns>
+            /// If the function retrieves a message other than <see cref="WindowMessage.Quit"/>,
+            /// the return value is true.<para/>
+            /// If the function retrieves the <see cref="WindowMessage.Quit"/> message, the return value is false.
+            /// <para/>
+            /// If there is an error, the return value is -1. For example, the function fails if
+            /// <paramref name="window"/> is an invalid window handle or <paramref name="msg"/> is an invalid pointer.
+            /// To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
+            /// </returns>
+            public static int GetMessage([Out] out Msg msg, [In] [Optional] HWND window)
+                => GetMessage(out msg, window, 0, 0);
 
             /// <summary>
             /// Retrieves the message time for the last message retrieved by the
