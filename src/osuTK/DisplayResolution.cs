@@ -5,13 +5,27 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace osuTK
 {
     /// <summary>Contains information regarding a monitor's display resolution.</summary>
-    public class DisplayResolution
+    public class DisplayResolution : IComparable<DisplayResolution>, IEquatable<DisplayResolution>
     {
+        private static readonly Dictionary<(double upper, double lower), string> aspectRatios = new Dictionary<(double upper, double lower), string>
+        {
+            { (1.77, 1.8), "16:9" },
+            { (1.33, 1.34), "4:3" },
+            { (1.5, 1.5), "3:2" },
+            { (1.66, 1.67), "5:3" },
+            { (1.25, 1.25), "5:4" },
+            { (1.6, 1.6), "16:10" },
+            { (1.88, 1.89), "17:9" },
+            { (2, 2), "18:9" },
+            { (2.33, 2.34), "21:9" },
+        };
+        
         private Rectangle bounds;
 
         internal DisplayResolution() { }
@@ -40,36 +54,17 @@ namespace osuTK
             this.bounds = new Rectangle(x, y, width, height);
             this.BitsPerPixel = bitsPerPixel;
             this.RefreshRate = refreshRate;
+
+            double ratio = width / (double) height;
+            foreach (var aspectRatio in aspectRatios.Keys)
+            {
+                if (ratio >= aspectRatio.lower && ratio <= aspectRatio.upper)
+                {
+                    AspectRatio = aspectRatios[aspectRatio];
+                    break;
+                }
+            }
         }
-
-#if false
-
-        /// <summary>
-        /// Creates a new DisplayResolution object for the specified DisplayDevice.
-        /// </summary>
-        /// <param name="width">The requested width in pixels.</param>
-        /// <param name="height">The requested height in pixels.</param>
-        /// <param name="bitsPerPixel">The requested bits per pixel in bits.</param>
-        /// <param name="refreshRate">The requested refresh rate in hertz.</param>
-        /// <remarks>osuTK will select the closest match between all available resolutions on the specified DisplayDevice.</remarks>
-        ///
-        public DisplayResolution(int width, int height, int bitsPerPixel, float refreshRate, DisplayDevice device)
-        {
-            // Refresh rate may be zero, since this information may not be available on some platforms.
-            if (width <= 0) throw new ArgumentOutOfRangeException("width", "Must be greater than zero.");
-            if (height <= 0) throw new ArgumentOutOfRangeException("height", "Must be greater than zero.");
-            if (bitsPerPixel <= 0) throw new ArgumentOutOfRangeException("bitsPerPixel", "Must be greater than zero.");
-            if (refreshRate < 0) throw new ArgumentOutOfRangeException("refreshRate", "Must be greater than, or equal to zero.");
-            if (device == null) throw new ArgumentNullException("DisplayDevice", "Must be a valid DisplayDevice");
-
-            DisplayResolution res = device.SelectResolution(width, height, bitsPerPixel, refreshRate);
-
-            this.width = res.width;
-            this.height = res.height;
-            this.bits_per_pixel = res.bits_per_pixel;
-            this.refresh_rate = res.refresh_rate;
-        }
-#endif
 
         /// <summary>
         /// Gets a System.Drawing.Rectangle that contains the bounds of this display device.
@@ -104,6 +99,11 @@ namespace osuTK
         public float RefreshRate { get; internal set; }
 
         /// <summary>
+        /// A friendly name for the proportions between width and height of this resolution.
+        /// </summary>
+        public string AspectRatio { get; } = "Unknown";
+        
+        /// <summary>
         /// Returns a System.String representing this DisplayResolution.
         /// </summary>
         /// <returns>A System.String representing this DisplayResolution.</returns>
@@ -112,6 +112,49 @@ namespace osuTK
             #pragma warning disable 612,618
             return String.Format("{0}x{1}@{2}Hz", Bounds, BitsPerPixel, RefreshRate);
             #pragma warning restore 612,618
+        }
+
+        public int CompareTo(DisplayResolution other)
+        {
+            // Descending height
+            if (other.Height - Height != 0)
+            {
+                return other.Height - Height;
+            }
+
+            // Descending width
+            if (other.Width - Width != 0)
+            {
+                return other.Width - Width;
+            }
+
+            // Descending refresh rate
+            if (RefreshRate > other.RefreshRate)
+            {
+                return -1;
+            }
+
+            if (RefreshRate < other.RefreshRate)
+            {
+                return 1;
+            }
+
+            // Descending bits per pixel
+            return other.BitsPerPixel - BitsPerPixel;
+        }
+
+        public bool Equals(DisplayResolution other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return
+                Width == other.Width &&
+                Height == other.Height &&
+                BitsPerPixel == other.BitsPerPixel &&
+                RefreshRate == other.RefreshRate;
         }
 
         /// <summary>Determines whether the specified resolutions are equal.</summary>
@@ -125,12 +168,7 @@ namespace osuTK
             }
             if (this.GetType() == obj.GetType())
             {
-                DisplayResolution res = (DisplayResolution)obj;
-                return
-                    Width == res.Width &&
-                    Height == res.Height &&
-                    BitsPerPixel == res.BitsPerPixel &&
-                    RefreshRate == res.RefreshRate;
+                return Equals((DisplayResolution) obj);
             }
 
             return false;

@@ -70,7 +70,8 @@ namespace osuTK
             // Todo: Consolidate current resolution with bounds? Can they fall out of sync right now?
             this.current_resolution = currentResolution;
             IsPrimary = primary;
-            this.available_resolutions.AddRange(availableResolutions);
+            this.available_resolutions.AddRange(availableResolutions.Distinct());
+            available_resolutions.Sort();
             #pragma warning disable 612,618
             this.bounds = bounds == Rectangle.Empty ? currentResolution.Bounds : bounds;
             #pragma warning restore 612,618
@@ -153,20 +154,14 @@ namespace osuTK
         /// </remarks>
         public DisplayResolution SelectResolution(int width, int height, int bitsPerPixel, float refreshRate)
         {
-            DisplayResolution resolution = FindResolution(width, height, bitsPerPixel, refreshRate);
-            if (resolution == null)
-            {
-                resolution = FindResolution(width, height, bitsPerPixel, 0);
-            }
-            if (resolution == null)
-            {
-                resolution = FindResolution(width, height, 0, 0);
-            }
-            if (resolution == null)
-            {
-                return current_resolution;
-            }
-            return resolution;
+            // since our resolutions are sorted, we get the resolution "as specified", with BPP and/or refresh rate
+            // being the highest available if specified as 0 in the method call.
+            return AvailableResolutions.FirstOrDefault(res =>
+                res.Width == width &&
+                res.Height == height &&
+                (bitsPerPixel == 0 || res.BitsPerPixel == bitsPerPixel) &&
+                (refreshRate == 0f || Math.Abs(res.RefreshRate - refreshRate) < 1f)
+            );
         }
 
         /// <summary>
@@ -178,6 +173,7 @@ namespace osuTK
             set
             {
                 available_resolutions = (List<DisplayResolution>)value;
+                available_resolutions.Sort();
                 available_resolutions_readonly = available_resolutions.AsReadOnly();
             }
         }
@@ -313,160 +309,13 @@ namespace osuTK
             return result;
         }
 
-        private DisplayResolution FindResolution(int width, int height, int bitsPerPixel, float refreshRate)
-        {
-            return available_resolutions.Find(delegate(DisplayResolution test)
-            {
-                return
-                    ((width > 0 && width == test.Width) || width == 0) &&
-                    ((height > 0 && height == test.Height) || height == 0) &&
-                    ((bitsPerPixel > 0 && bitsPerPixel == test.BitsPerPixel) || bitsPerPixel == 0) &&
-                    ((refreshRate > 0 && System.Math.Abs(refreshRate - test.RefreshRate) < 1.0) || refreshRate == 0);
-            });
-        }
-
         /// <summary>
         /// Returns a System.String representing this DisplayDevice.
         /// </summary>
         /// <returns>A System.String representing this DisplayDevice.</returns>
         public override string ToString()
         {
-            return String.Format("{0}: {1} ({2} modes available)", IsPrimary ? "Primary" : "Secondary",
-                Bounds.ToString(), available_resolutions.Count);
-        }
-
-        ///// <summary>Determines whether the specified DisplayDevices are equal.</summary>
-        ///// <param name="obj">The System.Object to check against.</param>
-        ///// <returns>True if the System.Object is an equal DisplayDevice; false otherwise.</returns>
-        //public override bool Equals(object obj)
-        //{
-        //    if (obj is DisplayDevice)
-        //    {
-        //        DisplayDevice dev = (DisplayDevice)obj;
-        //        return
-        //            IsPrimary == dev.IsPrimary &&
-        //            current_resolution == dev.current_resolution &&
-        //            available_resolutions.Count == dev.available_resolutions.Count;
-        //    }
-
-        //    return false;
-        //}
-
-        ///// <summary>Returns a unique hash representing this DisplayDevice.</summary>
-        ///// <returns>A System.Int32 that may serve as a hash code for this DisplayDevice.</returns>
-        ////public override int GetHashCode()
-        //{
-        //    return current_resolution.GetHashCode() ^ IsPrimary.GetHashCode() ^ available_resolutions.Count;
-        //}
-    }
-#if false
-    class FadeEffect : IDisposable
-    {
-        List<Form> forms = new List<Form>();
-        double opacity_step = 0.04;
-        int sleep_step;
-
-        internal FadeEffect()
-        {
-            foreach (Screen s in Screen.AllScreens)
-            {
-                Form form = new Form();
-                form.ShowInTaskbar = false;
-                form.StartPosition = FormStartPosition.Manual;
-                form.WindowState = FormWindowState.Maximized;
-                form.FormBorderStyle = FormBorderStyle.None;
-                form.TopMost = true;
-
-                form.BackColor = System.Drawing.Color.Black;
-                forms.Add(form);
-            }
-
-            sleep_step = 10 / forms.Count;
-            MoveToStartPositions();
-        }
-
-        void MoveToStartPositions()
-        {
-            int count = 0;
-            foreach (Screen s in Screen.AllScreens)
-            {
-            //    forms[count++].Location = new System.Drawing.Point(s.Bounds.X, s.Bounds.Y);
-                //forms[count].Size = new System.Drawing.Size(4096, 4096);
-                count++;
-            }
-        }
-
-        bool FadedOut
-        {
-            get
-            {
-                bool ready = true;
-                foreach (Form form in forms)
-                    ready = ready && form.Opacity >= 1.0;
-
-                return ready;
-            }
-        }
-
-        bool FadedIn
-        {
-            get
-            {
-                bool ready = true;
-                foreach (Form form in forms)
-                    ready = ready && form.Opacity <= 0.0;
-
-                return ready;
-            }
-        }
-
-        internal void FadeOut()
-        {
-            MoveToStartPositions();
-
-            foreach (Form form in forms)
-            {
-                form.Opacity = 0.0;
-                form.Visible = true;
-            }
-
-            while (!FadedOut)
-            {
-                foreach (Form form in forms)
-                {
-                    form.Opacity += opacity_step;
-                    form.Refresh();
-                }
-                Thread.Sleep(sleep_step);
-            }
-        }
-
-        internal void FadeIn()
-        {
-            MoveToStartPositions();
-
-            foreach (Form form in forms)
-                form.Opacity = 1.0;
-
-            while (!FadedIn)
-            {
-                foreach (Form form in forms)
-                {
-                    form.Opacity -= opacity_step;
-                    form.Refresh();
-                }
-                Thread.Sleep(sleep_step);
-            }
-
-            foreach (Form form in forms)
-                form.Visible = false;
-        }
-
-        public void Dispose()
-        {
-            foreach (Form form in forms)
-                form.Dispose();
+            return (IsPrimary ? "Primary" : "Secondary") + $" display ({Width}x{Height}@{RefreshRate}Hz) with {available_resolutions.Count} modes available";
         }
     }
-#endif
 }
